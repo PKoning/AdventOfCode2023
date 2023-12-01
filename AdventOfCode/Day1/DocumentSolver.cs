@@ -1,8 +1,23 @@
 ﻿namespace AdventOfCode.Day1
 {
+    internal record SpelledOutDigit(string Word, char Digit);
+
     internal class DocumentSolver : IPuzzleSolver
     {
         private readonly string _inputPath;
+
+        private static readonly SpelledOutDigit[] SpelledOutDigits = {
+            new("one", '1'),
+            new("two", '2'),
+            new("three", '3'),
+            new("four", '4'),
+            new("five", '5'),
+            new("six", '6'),
+            new("seven", '7'),
+            new("eight", '8'),
+            new("nine", '9'),
+            new("zero", '0')
+        };
 
         internal DocumentSolver(string inputPath)
         {
@@ -21,22 +36,34 @@
         }
 
         /// <summary>
-        /// We want to get the first and last digit of the line
-        /// Then we want to concatenate them to form a new number
+        /// We want to get the first and last digit of the line.
+        /// It doesn't matter if it's an actual digit character or the spelled out digit.
+        /// Then we want to concatenate them to form a new number.
         /// </summary>
         /// <param name="line">The line.</param>
         /// <returns>A new number.</returns>
-        private int getNumber(string line)
+        private static int getNumber(string line)
         {
-            var numbers = line.Where(char.IsDigit).ToList();
-            if (numbers.Count == 0)
+            var digits = new List<char>();
+            for (var i = 0; i < line.Length; i++)
             {
-                return 0;
+                var character = line[i];
+                if (char.IsDigit(character))
+                {
+                    digits.Add(line[i]);
+                    continue;
+                }
+
+                var rest = line[i..];
+                digits.AddRange(
+                    SpelledOutDigits
+                        .Where(spelledOutDigit => rest.StartsWith(spelledOutDigit.Word))
+                        .Select(spelledOutDigit => spelledOutDigit.Digit));
             }
 
-            var digits = new[] { numbers[0], numbers[^1] };
+            var resultingDigits = new[] { digits[0], digits[^1] };
 
-            return int.Parse(new string(digits));
+            return int.Parse(new string(resultingDigits));
         }
     }
 }
