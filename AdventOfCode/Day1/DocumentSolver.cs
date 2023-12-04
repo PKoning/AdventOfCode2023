@@ -2,7 +2,7 @@
 {
     internal record SpelledOutDigit(string Word, char Digit);
 
-    internal class DocumentSolver : IPuzzleSolver
+    internal sealed class DocumentSolver : IPuzzleSolver
     {
         private readonly string _inputPath;
 

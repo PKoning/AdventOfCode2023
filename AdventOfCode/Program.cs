@@ -1,10 +1,11 @@
 ﻿using AdventOfCode;
 using AdventOfCode.Day1;
+using AdventOfCode.Day2;
 using Spectre.Console;
 
 var day = AnsiConsole.Prompt(
     new SelectionPrompt<int>()
-        .AddChoices(Enumerable.Range(1, 1))
+        .AddChoices(Enumerable.Range(1, 2))
         .Title("Day")
         .MoreChoicesText("More days available down below")
 );
@@ -23,6 +24,8 @@ IPuzzleSolver CreatePuzzleSolver(int dayInput)
     {
         case 1:
             return new DocumentSolver(path);
+        case 2:
+            return new CubeGameSolver(path, 12, 13, 14);
         default:
             throw new ArgumentOutOfRangeException(nameof(dayInput), $"We haven't implemented day {dayInput} yet");
     }
