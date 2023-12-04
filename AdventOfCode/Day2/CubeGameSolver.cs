@@ -48,16 +48,50 @@
             {
                 Console.WriteLine($"Processing line - {line}");
                 var lineSplit = line.Split(':', StringSplitOptions.RemoveEmptyEntries);
-                var id = int.Parse(lineSplit[0].Replace("Game ", string.Empty));
-                if (AreHandsValid(lineSplit[1]))
-                {
-                    Console.WriteLine($"Line {line} is valid, adding {id} to the result");
-                    result += id;
-                }
+                //var id = int.Parse(lineSplit[0].Replace("Game ", string.Empty));
+                //if (AreHandsValid(lineSplit[1]))
+                //{
+                //    Console.WriteLine($"Line {line} is valid, adding {id} to the result");
+                //    result += id;
+                //}
+
+                result += CalculatePower(lineSplit[1]);
             }
 
             return result.ToString();
         }
+
+        #region Part 2
+
+        private int CalculatePower(string handsLine)
+        {
+            var hands = handsLine.Split(';', StringSplitOptions.RemoveEmptyEntries);
+            var maxCubeHand = new CubeHand { Red = 1, Green = 1, Blue = 1 };
+            foreach (var hand in hands)
+            {
+                var cubeHand = ToCubeHand(hand);
+                if (cubeHand.Red > maxCubeHand.Red)
+                {
+                    maxCubeHand.Red = cubeHand.Red;
+                }
+
+                if (cubeHand.Green > maxCubeHand.Green)
+                {
+                    maxCubeHand.Green = cubeHand.Green;
+                }
+
+                if (cubeHand.Blue > maxCubeHand.Blue)
+                {
+                    maxCubeHand.Blue = cubeHand.Blue;
+                }
+            }
+
+            return maxCubeHand.Red.Value * maxCubeHand.Green.Value * maxCubeHand.Blue.Value;
+        }
+
+        #endregion
+
+        #region Part 1
 
         private bool AreHandsValid(string handsLine)
         {
@@ -99,5 +133,7 @@
             }
             return cubeHand;
         }
+
+        #endregion
     }
 }
